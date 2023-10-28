@@ -12,7 +12,18 @@ class App extends React.Component<ISwapiData> {
   };
 
   async componentDidMount(): Promise<void> {
-    const { data } = await axiosInstance.get<ISwapi>('');
+    let value = localStorage.getItem('searchValue');
+    let str = '';
+
+    if (value === null) value = '';
+
+    if (value === '') {
+      str = '';
+    } else {
+      str = `?search=${value}`;
+    }
+
+    const { data } = await axiosInstance.get<ISwapi>(str);
 
     this.setState({
       swData: data.results,
@@ -21,18 +32,24 @@ class App extends React.Component<ISwapiData> {
   }
 
   handleClick = async (value: string): Promise<void> => {
+    let str = '';
+
     this.setState({
       isLoading: true,
     });
 
-    if (value !== '') {
-      const { data } = await axiosInstance.get<ISwapi>(`?search=${value}`);
-
-      this.setState({
-        swData: data.results,
-        isLoading: false,
-      });
+    if (value === '') {
+      str = '';
+    } else {
+      str = `?search=${value}`;
     }
+
+    const { data } = await axiosInstance.get<ISwapi>(str);
+
+    this.setState({
+      swData: data.results,
+      isLoading: false,
+    });
   };
 
   render() {

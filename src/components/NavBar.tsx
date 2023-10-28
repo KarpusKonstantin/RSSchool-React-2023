@@ -16,9 +16,13 @@ export default class NavBar extends React.Component<INavBarProps> {
   }
 
   componentDidMount(): void {
-    this.setState({
-      value: localStorage.getItem('searchValue'),
-    });
+    const value = localStorage.getItem('searchValue');
+
+    if (value !== null) {
+      this.setState({
+        value: localStorage.getItem('searchValue'),
+      });
+    }
   }
 
   handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -30,8 +34,6 @@ export default class NavBar extends React.Component<INavBarProps> {
   }
 
   handleClick() {
-    console.log('VALUE >>', this.state.value);
-
     this.props.getValue(this.state.value);
   }
 
